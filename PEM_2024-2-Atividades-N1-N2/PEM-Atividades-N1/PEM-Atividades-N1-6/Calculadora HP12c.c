@@ -1,4 +1,11 @@
+////Disciplina: Programação Estruturada e Modular 
+ // Prof. Carlos Veríssimo.
+ //Objetivo: Implementação da calculadora HP12c
+ //Data: 23/08/2024
+ //Autor: Cyntia Farias Ruffo
+ 
 #include <stdio.h>
+
 
 #include <stdlib.h>
 
