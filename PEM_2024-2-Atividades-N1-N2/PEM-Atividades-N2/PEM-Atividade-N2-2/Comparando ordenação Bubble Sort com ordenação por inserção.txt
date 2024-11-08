@@ -1,0 +1,30 @@
+Atividade PEM N2-2
+Programação Estruturada e Modular
+Comparando ordenação "Bubble Sort" com ordenação 
+por inserção
+
+Cyntia Farias Ruffo
+
+Professor: Carlos Henrique Verissimo Pereira
+
+Após análise e alteração de ambos os códigos podemos ver que o 
+bubble sort possui um tempo de execução maior, considerando 
+que o por inserção tem um tempo de execução de 0,000006 
+segundos e o bubble sort de 0,000011 segundos, ambos também 
+possuem uma quantidade de ciclos diferentes onde novamente o 
+bubble sort tem uma quantidade bem acima do que o de 
+inserção a diferença é de 827 ciclos, ou seja, novamente vemos 
+que a ordenação por inserção possui um desempenho e uma 
+eficiência bem melhor que o bubble sort, e isso tudo 
+considerando que ambos possuem a mesma quantidade de 
+trocas o que prova ainda mais a diferença entre ambos em 
+questão de desempenho, vou colocar abaixo os valores exatos 
+que foram computados em cada um dos programas:
+BUBBLE SORT:
+Tempo de execução: 0,000011 segundos
+Ciclos: 1.770
+Trocas: 884
+ORDENAÇÃO POR INSERÇÃO:
+Tempo de execução: 0,000006 segundos
+Ciclos: 943
+Trocas: 88

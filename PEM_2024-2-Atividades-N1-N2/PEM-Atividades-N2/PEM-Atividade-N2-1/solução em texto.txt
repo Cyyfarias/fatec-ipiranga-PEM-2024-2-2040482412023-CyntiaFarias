@@ -1,0 +1,21 @@
+
+ Disciplina: Programaçao Estruturada e Modular               Prof. Carlos Veríssimo  
+                                  
+ Objetivo do Programa: Solução em texto bubblesort   
+
+ Data - 02/10/2024                                               
+ Autor: Cyntia Farias Ruffo
+
+
+Otimização no Bubble Sort:
+
+Adição de um bool chamado trocou, que rastreia se alguma troca foi feita em cada passagem. Se trocou for false ao final de uma passagem, o loop for é interrompido, pois o array já está ordenado.
+
+Entrada do Usuário:
+
+Permissão para o usuário definir o tamanho do array e insira os elementos do array manualmente.
+
+Modularização e Consistência:
+
+Uso de  constraint na função printArray para indicar que o array não será modificado.
+Também mudamos a declaração de trocou para bool, melhorando a clareza e intenção do c.
