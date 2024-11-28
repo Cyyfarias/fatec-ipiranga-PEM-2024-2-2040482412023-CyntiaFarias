@@ -1,4 +1,13 @@
-#include <stdio.h>
+/*Atividade PEM N2-2
+Programação Estruturada e Modular
+Comparando ordenação "Bubble Sort" com ordenação 
+por inserção
+
+Cyntia Farias Ruffo
+
+Professor: Carlos Henrique Verissimo Pereira*/
+
+# include <stdio.h>
 
 // Função para imprimir o array
 void printArray(int arr[], int size) {
