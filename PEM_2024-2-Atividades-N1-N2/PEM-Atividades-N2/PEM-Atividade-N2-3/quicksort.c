@@ -1,7 +1,7 @@
 /*Atividade PEM N2-2
 Programação Estruturada e Modular
-Comparando ordenação "Bubble Sort" com ordenação 
-por inserção
+
+Quicksort
 
 Cyntia Farias Ruffo
 
