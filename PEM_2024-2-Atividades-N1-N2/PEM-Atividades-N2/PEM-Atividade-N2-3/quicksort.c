@@ -1,4 +1,13 @@
-#include <stdio.h>
+/*Atividade PEM N2-2
+Programação Estruturada e Modular
+
+Quicksort
+
+Cyntia Farias Ruffo
+
+Professor: Carlos Henrique Verissimo Pereira*/
+
+# include <stdio.h>
 
 // Função para imprimir o array
 void printArray(int arr[], int size) {
