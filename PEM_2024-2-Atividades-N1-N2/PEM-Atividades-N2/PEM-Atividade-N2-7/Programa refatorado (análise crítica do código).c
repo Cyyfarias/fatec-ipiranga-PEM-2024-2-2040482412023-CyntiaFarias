@@ -10,47 +10,42 @@
  
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
 
 #define MAX_PRODUTOS 100
 #define NOME_MAX 50
 #define DESCRICAO_MAX 100
-#define ARQUIVO_PRODUTOS "produtos.dat"
 
 typedef struct {
     int id;
     char nome[NOME_MAX];
     char descricao[DESCRICAO_MAX];
-    float precoUnitario;
+    double precoUnitario; // Tipo double para o preço
     int qteDispo;
 } Produto;
 
+// Protótipos das funções CRUD
 void inserirProduto(Produto *produtos, int *cont);
 void consultarProduto(Produto *produtos, int cont);
 void alterarProduto(Produto *produtos, int cont);
 void excluirProduto(Produto *produtos, int *cont);
 void listarProdutos(Produto *produtos, int cont);
-void comprarProduto(Produto *produtos, int cont);
-void imprimirProduto(const Produto *produto);
-int buscarProdutoPorID(Produto *produtos, int cont, int id);
-void salvarProdutos(Produto *produtos, int cont);
-void carregarProdutos(Produto *produtos, int *cont);
+void venderProduto(Produto *produtos, int cont);
+void imprimirProduto(const Produto *produto); // Utiliza ponteiro para a estrutura
 
+// Função principal
 int main() {
     Produto produtos[MAX_PRODUTOS];
-    int cont = 0;
+    int cont = 0; // Contador de produtos
     int opcao;
-
-    carregarProdutos(produtos, &cont);
 
     do {
         printf("\nMenu:\n");
-        printf("1. Inserir produto\n");
+        printf("1. Incluir produto\n");
         printf("2. Listar produtos\n");
         printf("3. Consultar produto\n");
         printf("4. Alterar produto\n");
         printf("5. Excluir produto\n");
-        printf("6. Comprar produto\n");
+        printf("6. Vender produto\n");
         printf("7. Sair\n");
         printf("Escolha uma opcao: ");
         scanf("%d", &opcao);
@@ -72,10 +67,9 @@ int main() {
                 excluirProduto(produtos, &cont);
                 break;
             case 6:
-                comprarProduto(produtos, cont);
+                venderProduto(produtos, cont);
                 break;
             case 7:
-                salvarProdutos(produtos, cont);
                 printf("Saindo...\n");
                 break;
             default:
@@ -86,34 +80,29 @@ int main() {
     return 0;
 }
 
+// Implementações CRUD
+
 void inserirProduto(Produto *produtos, int *cont) {
-    if (*cont >= MAX_PRODUTOS) {
+    if (*cont < MAX_PRODUTOS) {
+        Produto novoProduto;
+
+        printf("Informe o ID do produto: ");
+        scanf("%d", &novoProduto.id);
+        printf("Informe o nome do produto: ");
+        scanf(" %[^\n]", novoProduto.nome);
+        printf("Informe a descricao do produto: ");
+        scanf(" %[^\n]", novoProduto.descricao);
+        printf("Informe o preco unitario: ");
+        scanf("%lf", &novoProduto.precoUnitario);
+        printf("Informe a quantidade disponivel: ");
+        scanf("%d", &novoProduto.qteDispo);
+
+        produtos[*cont] = novoProduto;
+        (*cont)++;
+        printf("Produto inserido com sucesso!\n");
+    } else {
         printf("Limite de produtos atingido.\n");
-        return;
     }
-
-    Produto novoProduto;
-
-    printf("Informe o ID do produto: ");
-    scanf("%d", &novoProduto.id);
-
-    if (buscarProdutoPorID(produtos, *cont, novoProduto.id) != -1) {
-        printf("Erro: ID ja cadastrado.\n");
-        return;
-    }
-
-    printf("Informe o nome do produto: ");
-    scanf(" %[^\n]", novoProduto.nome);
-    printf("Informe a descricao do produto: ");
-    scanf(" %[^\n]", novoProduto.descricao);
-    printf("Informe o preco unitario: ");
-    scanf("%f", &novoProduto.precoUnitario);
-    printf("Informe a quantidade disponivel: ");
-    scanf("%d", &novoProduto.qteDispo);
-
-    produtos[*cont] = novoProduto;
-    (*cont)++;
-    printf("Produto inserido com sucesso!\n");
 }
 
 void listarProdutos(Produto *produtos, int cont) {
@@ -129,7 +118,7 @@ void listarProdutos(Produto *produtos, int cont) {
 }
 
 void imprimirProduto(const Produto *produto) {
-    printf("ID: %d, Nome: %s, Descricao: %s, Preco: %.2f, Estoque: %d\n",
+    printf("ID: %d, Nome: %s, Descricao: %s, Preco: %.2lf, Estoque: %d\n",
            produto->id, produto->nome, produto->descricao, produto->precoUnitario, produto->qteDispo);
 }
 
@@ -138,12 +127,13 @@ void consultarProduto(Produto *produtos, int cont) {
     printf("Informe o ID do produto que deseja consultar: ");
     scanf("%d", &idProduto);
 
-    int index = buscarProdutoPorID(produtos, cont, idProduto);
-    if (index != -1) {
-        imprimirProduto(&produtos[index]);
-    } else {
-        printf("Produto inexistente.\n");
+    for (int i = 0; i < cont; i++) {
+        if (produtos[i].id == idProduto) {
+            imprimirProduto(&produtos[i]);
+            return;
+        }
     }
+    printf("Produto inexistente.\n");
 }
 
 void alterarProduto(Produto *produtos, int cont) {
@@ -151,20 +141,21 @@ void alterarProduto(Produto *produtos, int cont) {
     printf("Informe o ID do produto que deseja alterar: ");
     scanf("%d", &idProduto);
 
-    int index = buscarProdutoPorID(produtos, cont, idProduto);
-    if (index != -1) {
-        printf("Novo nome do produto: ");
-        scanf(" %[^\n]", produtos[index].nome);
-        printf("Nova descricao do produto: ");
-        scanf(" %[^\n]", produtos[index].descricao);
-        printf("Novo preco unitario: ");
-        scanf("%f", &produtos[index].precoUnitario);
-        printf("Nova quantidade disponivel: ");
-        scanf("%d", &produtos[index].qteDispo);
-        printf("Produto alterado com sucesso!\n");
-    } else {
-        printf("Produto inexistente.\n");
+    for (int i = 0; i < cont; i++) {
+        if (produtos[i].id == idProduto) {
+            printf("Novo nome do produto: ");
+            scanf(" %[^\n]", produtos[i].nome);
+            printf("Nova descricao do produto: ");
+            scanf(" %[^\n]", produtos[i].descricao);
+            printf("Novo preco unitario: ");
+            scanf("%lf", &produtos[i].precoUnitario);
+            printf("Nova quantidade disponivel: ");
+            scanf("%d", &produtos[i].qteDispo);
+            printf("Produto alterado com sucesso!\n");
+            return;
+        }
     }
+    printf("Produto inexistente.\n");
 }
 
 void excluirProduto(Produto *produtos, int *cont) {
@@ -172,69 +163,59 @@ void excluirProduto(Produto *produtos, int *cont) {
     printf("Informe o ID do produto que deseja excluir: ");
     scanf("%d", &idProduto);
 
-    int index = buscarProdutoPorID(produtos, *cont, idProduto);
-    if (index != -1) {
-        for (int i = index; i < *cont - 1; i++) {
-            produtos[i] = produtos[i + 1];
+    for (int i = 0; i < *cont; i++) {
+        if (produtos[i].id == idProduto) {
+            for (int j = i; j < *cont - 1; j++) {
+                produtos[j] = produtos[j + 1];
+            }
+            (*cont)--;
+            printf("Produto excluido com sucesso!\n");
+            return;
         }
-        (*cont)--;
-        printf("Produto excluido com sucesso!\n");
-    } else {
-        printf("Produto inexistente.\n");
     }
+    printf("Produto inexistente.\n");
 }
 
-void comprarProduto(Produto *produtos, int cont) {
+void venderProduto(Produto *produtos, int cont) {
     if (cont == 0) {
-        printf("Nenhum produto cadastrado para compra.\n");
+        printf("Nenhum produto cadastrado para venda.\n");
         return;
     }
 
     int idProduto, quantidade;
-    printf("Informe o ID do produto que deseja comprar: ");
+    double desconto = 0.0;
+
+    printf("Informe o ID do produto que deseja vender: ");
     scanf("%d", &idProduto);
 
-    int index = buscarProdutoPorID(produtos, cont, idProduto);
-    if (index != -1) {
-        printf("Informe a quantidade que deseja comprar: ");
-        scanf("%d", &quantidade);
-
-        if (quantidade <= 0) {
-            printf("Erro: Quantidade invalida.\n");
-        } else if (quantidade > produtos[index].qteDispo) {
-            printf("Estoque insuficiente. Apenas %d disponiveis.\n", produtos[index].qteDispo);
-        } else {
-            produtos[index].qteDispo -= quantidade;
-            printf("Compra realizada com sucesso! Total: %.2f\n", produtos[index].precoUnitario * quantidade);
-        }
-    } else {
-        printf("Produto inexistente.\n");
-    }
-}
-
-int buscarProdutoPorID(Produto *produtos, int cont, int id) {
     for (int i = 0; i < cont; i++) {
-        if (produtos[i].id == id) {
-            return i;
+        if (produtos[i].id == idProduto) {
+            printf("Informe a quantidade que deseja vender: ");
+            scanf("%d", &quantidade);
+
+            if (quantidade > produtos[i].qteDispo) {
+                printf("Estoque insuficiente. Apenas %d disponiveis.\n", produtos[i].qteDispo);
+            } else {
+                printf("Informe o desconto (em %%): ");
+                scanf("%lf", &desconto);
+
+                if (desconto < 0 || desconto > 100) {
+                    printf("Desconto invalido. Nenhum desconto sera aplicado.\n");
+                    desconto = 0.0;
+                }
+
+                double totalSemDesconto = produtos[i].precoUnitario * quantidade;
+                double totalComDesconto = totalSemDesconto * (1 - desconto / 100);
+
+                produtos[i].qteDispo -= quantidade;
+
+                printf("Venda realizada com sucesso!\n");
+                printf("Total sem desconto: %.2lf\n", totalSemDesconto);
+                printf("Desconto aplicado: %.2lf%%\n", desconto);
+                printf("Total com desconto: %.2lf\n", totalComDesconto);
+            }
+            return;
         }
     }
-    return -1;
-}
-
-void salvarProdutos(Produto *produtos, int cont) {
-    FILE *arquivo = fopen(ARQUIVO_PRODUTOS, "wb");
-    if (arquivo == NULL) {
-        printf("Erro ao salvar os produtos.\n");
-        return;
-    }
-    fwrite(produtos, sizeof(Produto), cont, arquivo);
-    fclose(arquivo);
-}
-
-void carregarProdutos(Produto *produtos, int *cont) {
-    FILE *arquivo = fopen(ARQUIVO_PRODUTOS, "rb");
-    if (arquivo != NULL) {
-        *cont = fread(produtos, sizeof(Produto), MAX_PRODUTOS, arquivo);
-        fclose(arquivo);
-    }
+    printf("Produto inexistente.\n");
 }
