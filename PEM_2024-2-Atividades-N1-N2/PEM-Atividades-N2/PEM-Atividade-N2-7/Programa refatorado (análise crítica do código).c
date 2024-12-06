@@ -23,7 +23,7 @@ typedef struct {
     int qteDispo;
 } Produto;
 
-// Protótipos das funções CRUD
+
 void inserirProduto(Produto *produtos, int *cont);
 void consultarProduto(Produto *produtos, int cont);
 void alterarProduto(Produto *produtos, int cont);
